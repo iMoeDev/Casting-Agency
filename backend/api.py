@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request,abort
-from models import db,Actor,Movie,setup_db
+from backend.models import db,Actor,Movie,setup_db
 from flask_cors import CORS
-from auth.auth import  requires_auth, verify_decode_jwt, AuthError
+from backend.auth.auth import  requires_auth, verify_decode_jwt, AuthError
 
 def create_app(test_config=None):
         app = Flask(__name__)
