@@ -1,0 +1,423 @@
+{
+	"info": {
+		"_postman_id": "a01c769f-88c4-4b00-a120-6df0a3aa7149",
+		"name": "Casting Agency RBAC Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19208015"
+	},
+	"item": [
+		{
+			"name": "Casting Assistant Tests",
+			"item": [
+				{
+					"name": "Success - View Actors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_assistant_jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/actors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Success - View Movies",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_assistant_jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail - Add Actor (No Permission)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_assistant_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Test Actor\", \"age\": 30, \"gender\": \"male\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/actors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail - Patch Movie (No Permission)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_assistant_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"Updated Movie Title\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/movies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Casting Director Tests",
+			"item": [
+				{
+					"name": "Success - Add Actor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_director_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"New Actor\", \"age\": 25, \"gender\": \"female\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/actors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"actors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Success - Patch Movie",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_director_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"Updated Title\", \"release_date\": \"2025-01-01\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/movies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Success - Delete Actor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_director_jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/actors/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"actors",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail - Add Movie (No Permission)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_director_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"New Movie\", \"release_date\": \"2025-01-01\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fail - Delete Movie (No Permission)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{casting_director_jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/movies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Executive Producer Tests",
+			"item": [
+				{
+					"name": "Success - Add Movie",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{executive_producer_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"Brand New Movie\", \"release_date\": \"2025-06-01\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Success - Patch Movie",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{executive_producer_jwt}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"title\": \"Updated Movie Title\", \"release_date\": \"2025-12-25\"}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/movies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Success - Delete Movie",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{executive_producer_jwt}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/api/movies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "casting_assistant_jwt",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImhkVFJ3RkJ0cUlCMUJrZGRQZ18wbCJ9.eyJpc3MiOiJodHRwczovL2Rldi1oc2QyMTB3cW5yMWNtdTRmLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2N2FjZDdhYjJjODA1NDZiZmJjZWJhMTgiLCJhdWQiOlsiY29mZmVlIiwiaHR0cHM6Ly9kZXYtaHNkMjEwd3FucjFjbXU0Zi51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzM5Mzg3MjcwLCJleHAiOjE3Mzk0NzM2NzAsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJYQjlOOFFTejVKczcwaEhLOWFETFZlbEViMHBDVEdiVCIsInBlcm1pc3Npb25zIjpbInZpZXc6YWN0b3JzIiwidmlldzptb3ZpZXMiXX0.Jxv_dZbxzlhxFwl74mWAq3bgWtY9BevHwD4ngpX6G96iTTrjcknG3Rtrn301QAyqd1DiH_QGutMjdyOBtKLk-b2qGbUGQuxcHKtIEZdg2gIooHtLlhZ5z2P_zOoDy5DdddAutIDXfwut6Kja8ed-FoAuMOdVYxae0yyYNmlTY2Guo9uxjYA8QflLF14ukCcB8xxPDeaVNKab0GCJkrBHoDSMJ2o6M_6z83Ef1ieF1n_A34-RRIDg0FM_zvaIxCnmXbpBFremQqC4ZM5zWjruxBnnaFs1wiTLUGpFmPOEmmv1VVLKzQXV5UtZUDNrcz1cjQc41asimEKWePEiWrH_Jw",
+			"type": "string"
+		},
+		{
+			"key": "casting_director_jwt",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImhkVFJ3RkJ0cUlCMUJrZGRQZ18wbCJ9.eyJpc3MiOiJodHRwczovL2Rldi1oc2QyMTB3cW5yMWNtdTRmLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2N2FjZDdjZWFiM2Y4MGE5ZDU3N2JiNzMiLCJhdWQiOlsiY29mZmVlIiwiaHR0cHM6Ly9kZXYtaHNkMjEwd3FucjFjbXU0Zi51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzM5NDMxMzAzLCJleHAiOjE3Mzk1MTc3MDMsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJYQjlOOFFTejVKczcwaEhLOWFETFZlbEViMHBDVEdiVCIsInBlcm1pc3Npb25zIjpbImFkZDphY3RvcnMiLCJkZWxldGU6YWN0b3JzIiwicGF0Y2g6YWN0b3JzIiwicGF0Y2g6bW92aWVzIiwidmlldzphY3RvcnMiLCJ2aWV3Om1vdmllcyJdfQ.LFptTDPIU9bt4hJDJLASP88ewpTP3ek-C95xq_3ml4zABNRMqLRzUa_8ISdmBt_lqR6vcxz29Vl2f301uqhM9UVmYkjZ5hii473CrNtKWEQ4ly6PKZYBYIKtucNsv4XHvwyrZYkd6GnKII72pHQ7tNI3XZHZ1r6D4bjozQSKwnVtsjrMwjrC9N55HhUhSM8cZsX6l3144z6Aupv-VJSdhXMVRqbZqurnc-MZ5lXYxnRyI9iKzAHC_NKlEKKKbXx9jXuKwHtAlhGiWHu5u1qs6K4A_O3xvEZ8kp4DNffj025B52FasLXnfSVL2ehshmg07mEIywVZlbiQaqzc5-SLLQ",
+			"type": "string"
+		},
+		{
+			"key": "executive_producer_jwt",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImhkVFJ3RkJ0cUlCMUJrZGRQZ18wbCJ9.eyJpc3MiOiJodHRwczovL2Rldi1oc2QyMTB3cW5yMWNtdTRmLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2N2FjZDdmM2E0YWYxZTdhYjE1OWYxMDMiLCJhdWQiOlsiY29mZmVlIiwiaHR0cHM6Ly9kZXYtaHNkMjEwd3FucjFjbXU0Zi51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzM5NDMxMzYyLCJleHAiOjE3Mzk1MTc3NjIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJhenAiOiJYQjlOOFFTejVKczcwaEhLOWFETFZlbEViMHBDVEdiVCIsInBlcm1pc3Npb25zIjpbImFkZDphY3RvcnMiLCJhZGQ6bW92aWVzIiwiZGVsZXRlOmFjdG9ycyIsImRlbGV0ZTptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJ2aWV3OmFjdG9ycyIsInZpZXc6bW92aWVzIl19.r37i_6O2ERwbo4TE13tpOs9OJVKKTTx5J40ylQbZQD0GussX3nCHjPMwsG-tkrrFZk31SOHRin2mJJYUeGI0LWIdZLfgejru8RoTio8GDmdii-8lJ3Hf962GJhJDDxD6zitM_tv0qxhVNhdjCxfF43Uq3vepK_I3tVSASFfB-EyOeVy71w3FZEzgdigDT_UcI3aiOlbkWeJn344TNYez45IB1RXQP34xNmBC4_9yqq1h672fuHxcx10ywlS7v3CnYNKvn5z8Ka41ELmH76OWokghN_P3_yr_CpfXSDqWIDtugDQ__Y6US-7--gN7uBEz2wmDdFdDF7cnGm6nxA7yvQ",
+			"type": "string"
+		}
+	]
+}

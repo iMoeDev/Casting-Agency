@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+   }
+   
+   .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+   }
+   
+   table {
+    width: 100%;
+    border-collapse: collapse;
+   }
+   
+   th, td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+   }
+   
+   th {
+    background: #f8f9fa;
+    font-weight: bold;
+   }
+   
+   tr:hover {
+    background: #f8f9fa;
+   }
