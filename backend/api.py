@@ -1,8 +1,8 @@
-from flask import Flask, jsonify, request,abort
+from flask import Flask, jsonify, request,abort,send_from_directory
 from backend.models import db,Actor,Movie,setup_db
 from flask_cors import CORS
 from backend.auth.auth import  requires_auth, verify_decode_jwt, AuthError
-
+import os
 def create_app(test_config=None):
         app = Flask(__name__)
         app.debug = True
@@ -18,6 +18,14 @@ def create_app(test_config=None):
             response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response
+        
+        @app.route("/", defaults={"path": ""})
+        @app.route("/<path:path>")
+        def serve_react(path):
+            if path != "" and os.path.exists(f"build/{path}"):
+                return send_from_directory("build", path)
+            else:
+                return send_from_directory("build", "index.html")
 
         @app.route('/api/actors',methods=['GET'])
         @requires_auth('view:actors')
@@ -47,6 +55,7 @@ def create_app(test_config=None):
             'release_date': movie.release_date,
             } for movie in movies]
             })
+        
 
 
 
