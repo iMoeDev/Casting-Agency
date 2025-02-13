@@ -4,7 +4,7 @@ from flask_cors import CORS
 from backend.auth.auth import  requires_auth, verify_decode_jwt, AuthError
 import os
 def create_app(test_config=None):
-        app = Flask(__name__)
+        app = Flask(__name__,static_url_path='/',static_folder='./build')
         app.debug = True
         if test_config:
          app.config.update(test_config) 
@@ -19,13 +19,9 @@ def create_app(test_config=None):
             response.headers.add('Access-Control-Allow-Credentials', 'true')
             return response
         
-        @app.route("/", defaults={"path": ""})
-        @app.route("/<path:path>")
-        def serve_react(path):
-            if path != "" and os.path.exists(f"build/{path}"):
-                return send_from_directory("build", path)
-            else:
-                return send_from_directory("build", "index.html")
+        @app.route("/")
+        def index():
+         return app.send_static_file('index.html')
 
         @app.route('/api/actors',methods=['GET'])
         @requires_auth('view:actors')
