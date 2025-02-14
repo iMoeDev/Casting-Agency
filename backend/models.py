@@ -17,6 +17,8 @@ def setup_db(app, database_url=None):
         if app.config.get("TESTING", False) or "FLASK_ENV" in os.environ and os.environ["FLASK_ENV"] == "testing":
             database_url = os.getenv('DB_TEST_URL') 
         print(f" Checking DB_URL: {database_url}") 
+        if database_url and database_url.startswith("postgres://"):
+          database_url = database_url.replace("postgres://", "postgresql://", 1)
         #  Ensure Flask recognizes the database before migrations
         if not hasattr(app, 'db_initialized'):
             app.config["SQLALCHEMY_DATABASE_URI"] = database_url
