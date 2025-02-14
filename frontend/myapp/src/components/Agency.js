@@ -21,7 +21,7 @@ const Agency = () => {
   
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("https://finalone-6c4264b75abb.herokuapp.com/api/user-info", {
+      const response = await fetch("http://127.0.0.1:5000/api/user-info", {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -47,7 +47,7 @@ const Agency = () => {
           return [];
         }
   
-        const response = await fetch(`https://finalone-6c4264b75abb.herokuapp.com/api/${endpoint}`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/${endpoint}`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -119,7 +119,7 @@ const handleLogout= async()=>{
 
 
 const handleAddMovie = async () => {
-    fetch('https://finalone-6c4264b75abb.herokuapp.com/api/movies', {
+    fetch('http://127.0.0.1:5000/api/movies', {
       method: 'POST',
       headers: { 
           'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ const handleAddMovie = async () => {
 
 
   const handleAddActor = () => {
-    fetch('https://finalone-6c4264b75abb.herokuapp.com/api/actors', {
+    fetch('http://127.0.0.1:5000/api/actors', {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ const handleAddMovie = async () => {
 const handleDelete = async (id, type) => {
   console.log(id)
   console.log(type)
-  fetch(`https://finalone-6c4264b75abb.herokuapp.com/api/${type}/${id}`, { 
+  fetch(`http://127.0.0.1:5000/api/${type}/${id}`, { 
       method: 'DELETE',
       headers: {
           'Authorization': `Bearer ${token}`
@@ -223,7 +223,7 @@ const handleDelete = async (id, type) => {
       });
       console.log('Actor update body:', body);
     }
-    fetch(`https://finalone-6c4264b75abb.herokuapp.com/api/${type}/${id}`, { 
+    fetch(`http://127.0.0.1:5000/api/${type}/${id}`, { 
       method: 'PATCH',
 
       body:body
