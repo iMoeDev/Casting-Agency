@@ -151,8 +151,8 @@ The API uses **Auth0** for authentication and role-based access control (RBAC). 
 - Create a new **Regular Web Application**
 - Configure the **Allowed Callback URLs** to include:
   ```
-  http://localhost:3000
-  https://finalone-6c4264b75abb.herokuapp.com
+  http://localhost:3000,
+  http://127.0.0.1:5000
   ```
 
 ### **2. Define API & Permissions**
