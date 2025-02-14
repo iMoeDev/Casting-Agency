@@ -11,7 +11,8 @@ def create_app(test_config=None):
         if test_config:
          app.config.update(test_config) 
         setup_db(app)
-        CORS(app, resources={r"/api/*": {"origins": '*'}})
+        CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://finalone-6c4264b75abb.herokuapp.com"]}})
+
 
 
         @app.after_request
