@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import './Agency.css'
 import {useAuth0} from '@auth0/auth0-react'
 
@@ -14,90 +14,98 @@ const Agency = () => {
   const [editingActor, setEditingActor] = useState(false);
   const [editingMovie,setEditingMovie] = useState(false)
   const [permissions, setPermissions] = useState([]); 
-  let token = localStorage.getItem('token')||'';
+  const [token, setToken] = useState(localStorage.getItem("token"));
   let body='';
 
 
   
-  const fetchData = async (endpoint) => {
-    const token = localStorage.getItem('token'); 
-
+  const fetchUserInfo = async () => {
     try {
-        if (!token) {
-            console.warn("No token found - User might not be logged in.");
-            return [];
-        }
-
-        const response = await fetch(`http://127.0.0.1:5000/api/${endpoint}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.status === 401) {
-            throw new Error('Unauthorized - Please log in again');
-        }
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (err) {
-        console.error(`Error fetching ${endpoint}:`, err);
-        return []; 
-    }
-};
-
-useEffect(() => {
-  if (permissions.length === 0) return; 
-
-  const fetchAllData = async () => {
-      if (permissions.includes("view:movies")) {
-          const moviesData = await fetchData("movies");
-          setMovies(moviesData.movies || []);
-      }
-
-      if (permissions.includes("view:actors")) {
-          const actorsData = await fetchData("actors");
-          setActors(actorsData.actors || []);
-      }
-  };
-
-  fetchAllData();
-}, [permissions]);
-
- const handleLogin = async () => {
-  try {
-    await loginWithPopup({
-      authorizationParams: {
-        prompt: "login" 
-      }
-    });
-    const token = await getAccessTokenSilently();
-    localStorage.setItem("token", token);
-    
-    const response = await fetch("http://127.0.0.1:5000/api/user-info", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!response.ok) throw new Error("Failed to fetch user info");
-
-    const userData = await response.json();
-    console.log("User Data:", JSON.stringify(userData, null, 2));
-
-    if (userData && userData.permissions) {
-        setPermissions([...userData.permissions]);  
-    } else {
+      const response = await fetch("http://127.0.0.1:5000/api/user-info", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      if (!response.ok) throw new Error("Failed to fetch user info");
+  
+      const userData = await response.json();
+  
+      if (userData?.permissions) {
+        setPermissions(userData.permissions);
+      } else {
         console.error("Permissions not found in userData");
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
-  } catch (error) {
-    console.error("Login error:", error);
-  }
-};
-
-
+  };
+  
+  const fetchData = useCallback(
+    async (endpoint) => {
+      try {
+        if (!token) {
+          console.warn("No token found - User might not be logged in.");
+          return [];
+        }
+  
+        const response = await fetch(`http://127.0.0.1:5000/api/${endpoint}`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (response.status === 401) {
+          throw new Error("Unauthorized - Please log in again");
+        }
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        return await response.json();
+      } catch (err) {
+        console.error(`Error fetching ${endpoint}:`, err);
+        return [];
+      }
+    },
+    [token]
+  );
+  
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (!token) return;
+  
+      if (permissions.length === 0) {
+        await fetchUserInfo();
+      }
+  
+      const promises = [];
+  
+      if (permissions.includes("view:movies") && movies.length === 0) {
+        promises.push(fetchData("movies").then((data) => setMovies(data.movies || [])));
+      }
+  
+      if (permissions.includes("view:actors") && actors.length === 0) {
+        promises.push(fetchData("actors").then((data) => setActors(data.actors || [])));
+      }
+  
+      await Promise.all(promises);
+    };
+  
+    fetchAllData();
+  }, [fetchData, permissions, token]);
+  
+  const handleLogin = async () => {
+    try {
+      await loginWithPopup({ authorizationParams: { prompt: "login" } });
+  
+      const newToken = await getAccessTokenSilently();
+      localStorage.setItem("token", newToken);
+      setToken(newToken);
+  
+      await fetchUserInfo(); 
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
 
 const handleLogout= async()=>{
   localStorage.removeItem('token', localStorage.getItem('token'));
@@ -356,7 +364,7 @@ const handleDelete = async (id, type) => {
           <td className="p-2">
             <input
               type="date"
-              defaultValue={new Date(movie.release_date).toISOString().split("T")[0]}
+              defaultValue= {new Date(movie.release_date).toISOString().split("T")[0]}
               className="border p-1 rounded"
               onChange={(e) =>
                 setNewMovie((prev) => ({ ...prev, release_date: e.target.value }))
@@ -367,7 +375,7 @@ const handleDelete = async (id, type) => {
       ) : (
         <>
           <td className="p-2">{movie.title}</td>
-          <td className="p-2">{movie.release_date}</td>
+          <td className="p-2"> {new Date(movie.release_date).toISOString().split("T")[0]}</td>
         </>
       )}
 
