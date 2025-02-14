@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request,abort,send_from_directory
 from backend.models import db,Actor,Movie,setup_db
 from flask_cors import CORS
-from backend.auth.auth import  requires_auth, verify_decode_jwt, AuthError
+from .auth.auth import  requires_auth, verify_decode_jwt, AuthError
+from datetime import datetime
+
 import os
 def create_app(test_config=None):
         app = Flask(__name__,static_url_path='/',static_folder='./build')
@@ -211,7 +213,7 @@ def create_app(test_config=None):
                     movie.title = body['title']
                     movie.update()
                 if 'release_date' in body and str(body['release_date']).strip():
-                    movie.release_date = body['release_date']
+                    movie.release_date = datetime.strptime(body['release_date'], "%Y-%m-%d").date()
                     movie.update()
 
 
@@ -220,16 +222,16 @@ def create_app(test_config=None):
                     'movie': {
                         'id': movie.id,
                         'title': movie.title,
-                        'release_date': movie.release_date
+                        'release_date': movie.release_date.strftime("%Y-%m-%d")
                     }
-                }), 200  # ✅ 200 OK for updates
+                }), 200  
 
             except Exception as e:
                 db.session.rollback()
                 return jsonify({
                     'success': False,
                     'error': str(e)
-                }), 500  # ✅ 500 for internal server errors
+                }), 500  
 
             finally:
                 db.session.close()

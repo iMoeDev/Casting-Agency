@@ -50,7 +50,7 @@ def get_token_auth_header():
             'description': 'Authorization header must be bearer token.'
         }), 401
 
-    return parts[1]  # ✅ Return only the token string
+    return parts[1]  
 
 def check_permissions(permission, payload):
     """Checks if the required permission exists in the JWT payload"""
@@ -68,7 +68,7 @@ def check_permissions(permission, payload):
             'description': 'Permission not found.'
         }), 403
 
-    return True  # ✅ Proper return instead of `raise True`
+    return True  
 
 def verify_decode_jwt(token):
     """Verifies and decodes the JWT using Auth0's JWKS"""
